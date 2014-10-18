@@ -26,17 +26,26 @@
  OF SUCH DAMAGE.
 """
 
+# gerrit parameters
 GERRIT_URL = 'gerrit-review.example.com'
+
+# approval types
+CODE_REVIEW = 'Code-Review'
+CONTENT_CHECK = 'Content-Check'
+VERIFIED = 'Verified'
+SUBMITTED = 'SUBM'
+MANUAL_TESTING = 'Manual-Testing'
+
+# query parameters
 QUERY_LIMIT = '500'
 QUERY_COMMON_PREFIX = 'ssh -p 29418 ' + GERRIT_URL + ' gerrit query --format=JSON --all-approvals'
 DAYS = '14'
-ROBOTS = []
-GLOBAL_AVG = None
 
 ALL = []
 REVIEWERS = []
 OWNERS = []
 TEAMS = {}
+ROBOTS = []
 
 # review filters
 PROJECT_FILTER = []

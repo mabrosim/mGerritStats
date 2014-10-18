@@ -31,7 +31,6 @@
 import json
 import os
 from subprocess import PIPE, Popen, TimeoutExpired
-from collections import OrderedDict
 from optparse import OptionParser
 
 try:
@@ -57,7 +56,7 @@ def out_path(output_dir, fname):
 def ask_gerrit(query):
     proc = Popen(query.split(), stdout=PIPE)
     try:
-        outs = proc.communicate(timeout=60)[0]
+        outs = proc.communicate(timeout=120)[0]
         return outs.decode().split('\n')[:-1]
     except TimeoutExpired:
         print("Communication timeout expired -> exit()")
@@ -80,7 +79,7 @@ def pull_reviews(status):
             raw = ask_gerrit(query)
             for review_json_str in raw:
                 try:
-                    json_object = json.loads(review_json_str, object_pairs_hook=OrderedDict)
+                    json_object = json.loads(review_json_str)
                 except ValueError:
                     print('Parse json error:' + review_json_str)
                     continue
@@ -92,7 +91,7 @@ def pull_reviews(status):
                     print(review_json_str)
                     if json_object['rowCount'] > 0:
                         # last but one item holds the sortkey
-                        json_object = json.loads(raw[-2], object_pairs_hook=OrderedDict)
+                        json_object = json.loads(raw[-2])
                     if 'sortKey' in json_object.keys():
                         query = query_init + ' resume_sortkey:' + json_object['sortKey']
                     else:
